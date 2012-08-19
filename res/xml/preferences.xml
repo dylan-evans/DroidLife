@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:key="droid_life_preferences"
+    	android:title="Life Choices" >
+
+	<ListPreference
+	    	android:key="theme"
+	    	android:title="Theme"
+	    	android:summary="What do you want it to look like"
+	    	android:entries="@array/theme_labels"
+	    	android:entryValues="@array/theme_values"
+	    	android:defaultValue="DefaultTheme"
+	    	/>
+	<ListPreference 
+			android:key="speed"
+			android:title="Speed"
+			android:summary="Set the speed"
+			android:entries="@array/speed_labels"
+			android:entryValues="@array/speed_values"
+			android:defaultValue="10"
+			/>
+	<ListPreference 
+	    	android:key="size"
+	    	android:title="Size"
+	    	android:summary="How big do you want it?"
+	    	android:entries="@array/size_labels"
+	    	android:entryValues="@array/size_values"
+	    	android:defaultValue="20"
+	    	/>
+	<CheckBoxPreference 
+		    android:key="blurred"
+		    android:title="Blur"
+	    	android:summary="Blur stuff"
+	    	android:defaultValue="false"
+	    	/>
+	<CheckBoxPreference 
+	    	android:key="wrapped"
+	    	android:title="Wrap"
+	    	android:summary="Cells wrap around"
+	    	android:defaultValue="false"
+	    	/>
+	<CheckBoxPreference 
+	    	android:key="disco"
+	    	android:title="Disco mode"
+	    	android:summary=""
+	    	android:defaultValue="false"/>
+</PreferenceScreen>	
+	    

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.dje.life"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10" />
+    <uses-feature android:name="android.software.live_wallpaper" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <service android:name=".LifeWallpaper"
+            android:label="@string/app_name"
+            android:description="@string/app_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter >
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper" android:resource="@xml/life" />
+        </service>
+        <activity
+            android:label="Preferences"
+            android:name=".LifePreferenceActivity"
+            android:theme="@android:style/Theme.WallpaperSettings"
+            android:exported="true" />
+    </application>
+
+</manifest>

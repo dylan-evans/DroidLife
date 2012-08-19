@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="speed_labels">
+        <item>Glacial</item>
+        <item>Slow</item>
+        <item>Medium</item>
+        <item>Fast</item>
+    </string-array>
+    
+    <string-array name="speed_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+    </string-array>
+    
+    <string-array name="size_labels">
+        <item>Tiny</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    
+    <string-array name="size_values">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+		<item>40</item>
+    </string-array>
+    
+    <string-array name="theme_labels">
+        <item>Circle Theme</item>
+        <item>Classic</item>
+        <item>Android Theme</item>
+        <item>Random Themes</item>
+    </string-array>
+    
+    <string-array name="theme_values">
+        <item>CircleTheme</item>
+        <item>ClassicTheme</item>
+        <item>AndroidTheme</item>
+        <item>Random</item>
+    </string-array>
+    
+</resources>
