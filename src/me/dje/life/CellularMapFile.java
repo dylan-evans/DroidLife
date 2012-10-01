@@ -11,6 +11,12 @@ import java.util.regex.Pattern;
 
 import android.content.Context;
 
+/**
+ * Parses and represents a map file which describes a set of structures used to 
+ * initialise a grid. 
+ * @author dylan
+ *
+ */
 public class CellularMapFile {
 	private static enum State { TOP, MAP, X, Y, };
 	private static enum Token { EOF, SPACE, COMMENT, ID, NUM, LBRAC, RBRAC, 
@@ -32,6 +38,12 @@ public class CellularMapFile {
 	
 	private HashMap<String, Map> patterns;
 	
+	/**
+	 * Open and parse a map file.
+	 * @param context A Context instance for opening the data file
+	 * @param fileName The name of the file to open
+	 * @throws Exception
+	 */
 	public CellularMapFile(Context context, String fileName) 
 			throws Exception {
 		InputStream raw = context.getResources().openRawResource(R.raw.life);
@@ -46,6 +58,11 @@ public class CellularMapFile {
 		new Parser(fileText);
 	}
 	
+	/**
+	 * Get a Map instance representing the points in a given map.
+	 * @param name The name of a map.
+	 * @return a Map instance.
+	 */
 	public Map getPoints(String name) {
 		if(!patterns.containsKey(name))
 			return null;
@@ -53,7 +70,7 @@ public class CellularMapFile {
 	}
 	
 	/**
-	 * A coordinate
+	 * A single coordinate.
 	 */
 	class Point {
 		public final int x, y;
@@ -64,30 +81,54 @@ public class CellularMapFile {
 	}
 	
 	/**
-	 * Hold a set of points
+	 * The Map class represents a set of points.
 	 * @author dylan
 	 *
 	 */
 	class Map implements Iterable<Point> {
 		private Vector<Point> points;
+		
+		/**
+		 * Create a Map instance.
+		 */
 		Map() {
 			points = new Vector<Point>();
 		}
 		
+		/**
+		 * Get an iterator over the points of the map.
+		 */
 		public Iterator<Point> iterator() {
 			return points.iterator();
 		}
 		
+		/**
+		 * Add a point to a map.
+		 * @param x Horizontal coordinate
+		 * @param y Vertical coordinate
+		 */
 		public void add(int x, int y) {
 			points.add(new Point(x, y));
 		}
 		
+		/**
+		 * Add the points of a map at a specified offset.
+		 * @param mName The name of the map to be included
+		 * @param x The horizontal offset
+		 * @param y The vertical offset
+		 */
 		public void add(String mName, int x, int y) {
-			System.out.println("map: " + mName);
+			//System.out.println("map: " + mName);
 			Map m = patterns.get(mName);
 			add(m, x, y);
 		}
 		
+		/**
+		 * Add the points of a given map at a specified offset.
+		 * @param m The map containing the set of points
+		 * @param x The horizontal offset
+		 * @param y The vertical offset
+		 */
 		public void add(Map m, int x, int y) {
 			for(Point p : m) {
 				add(p.x + x, p.y + y);
@@ -95,31 +136,31 @@ public class CellularMapFile {
 		}
 	}
 	
+	/**
+	 * This exception represents a syntax error.
+	 * @author dylan
+	 *
+	 */
 	class UnexpectedTokenException extends Exception {
 		
 	}
 	
-	class SyntaxException extends Exception {
-		
-	}
-	
 	/**
-	 * The Parser class 
-	 * @author dylan
+	 * The map file parser.
 	 *
 	 */
 	class Parser {
 		/**
-		 * 
 		 * @param mapText
 		 * @throws UnexpectedTokenException
 		 */
 		Parser(String mapText) throws UnexpectedTokenException {
 			Tokenizer t = new Tokenizer(mapText);
 			
+			// This is the body of the parser, a map begins with an ID
 			while(t.expect(Token.ID) != null) {
 				String name = t.text();
-				t.require(Token.LBRAC);
+				t.require(Token.LBRAC); // Followed by a left bracket
 				Map map = new Map();
 				Token cur;
 				while((cur = t.expect(Token.ID, Token.LPAR)) != null) {
@@ -153,6 +194,11 @@ public class CellularMapFile {
 		}
 	}
 	
+	/**
+	 * A token scanner which uses a stack to verify grammar rules.
+	 * 
+	 *
+	 */
 	class Tokenizer implements Iterator<Token> {
 		private Matcher match;
 		private Token currentToken;
@@ -162,6 +208,10 @@ public class CellularMapFile {
 		private LinkedList<String> stringStack;
 		private Vector<Token> ignoreTokens;
 		
+		/**
+		 * Initialise the scanner with a string.
+		 * @param text The string to scan
+		 */
 		Tokenizer(String text) {
 			tokenIndex = 0;
 			tokenStack = new LinkedList<Token>();
@@ -175,7 +225,7 @@ public class CellularMapFile {
 		
 		/**
 		 * Read the next available token. The Token is read from the stack if
-		 * one is one is ready.
+		 * one is ready.
 		 * @return The next Token.
 		 */
 		private Token readStack() {
@@ -220,6 +270,10 @@ public class CellularMapFile {
 			tokenIndex = 0;
 		}
 		
+		/**
+		 * Check whether more tokens are available. 
+		 * @return True if there are more tokens, otherwise false
+		 */
 		@Override
 		public boolean hasNext() {
 			if(tokenStack.size() == 0) {
@@ -231,6 +285,10 @@ public class CellularMapFile {
 			return true;
 		}
 
+		/**
+		 * Get the next available token. This method removes the token from the
+		 * stack if available.
+		 */
 		@Override
 		public Token next() {
 			if(!hasNext())
@@ -240,20 +298,29 @@ public class CellularMapFile {
 			return cur;
 		}
 		
+		/**
+		 * Get the text of the token read by the last call to next.
+		 * @return The text of the token
+		 */
 		public String text() {
 			return currentText;
 		}
-
+		
+		/**
+		 * Non functioning method required to implement Iterator.
+		 * @see java.util.Iterator#remove()
+		 */
 		@Override
 		public void remove() {
 			
 		}
 		
 		/**
-		 * Require any one of the Tokens in the argument list. 
+		 * Require any one of the Tokens in the argument list. An exception is
+		 * thrown if the no matching token is found.
 		 * @param tokens A list of Tokens
 		 * @return False only at the end of the file.
-		 * @throws UnexpectedTokenException
+		 * @throws UnexpectedTokenException If the specified token isn't found
 		 */
 		public Token require(Token ... tokens) 
 				throws UnexpectedTokenException {
@@ -290,9 +357,11 @@ public class CellularMapFile {
 		}
 		
 		/**
-		 * 
-		 * @param seq
-		 * @return
+		 * Expect the specified sequence of tokens in the given order. If the 
+		 * tokens do not match then the stack is reset and an exception is 
+		 * thrown.
+		 * @param seq An ordered list of tokens
+		 * @return An array of strings containing the text of each token
 		 * @throws UnexpectedTokenException
 		 */
 		public String[] sequence(Token ... seq) 
@@ -301,7 +370,7 @@ public class CellularMapFile {
 			int i = 0;
 			for(Token t : seq) {
 				Token nt = readStack();
-				System.out.println("R: " + t + " T: " + nt);
+				//System.out.println("R: " + t + " T: " + nt);
 				if(t == nt) {
 					items[i] = stringStack.get(tokenIndex - 1);
 				} else {
@@ -313,7 +382,7 @@ public class CellularMapFile {
 			clearStack();
 			return items;
 		}
-	}
 	
+	}
 	
 }
