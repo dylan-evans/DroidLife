@@ -8,8 +8,8 @@ import me.dje.graph.Vertex;
 import android.graphics.Point;
 
 /**
- * CellularGrid is the model class of Droid Life. It provides the engine for 
- * stepping through the cellular automation.
+ * CellularGrid is the data model of Droid Life. It provides the engine for 
+ * stepping through the cellular automation and provides the ruleset.
  * @author dylan
  *
  */
@@ -20,6 +20,13 @@ public class CellularGrid {
 	private boolean changeMap[];
 	private Random rand;
 	
+	/**
+	 * Create a grid with the given map file.
+	 * @param map
+	 * @param width
+	 * @param height
+	 * @param wrap
+	 */
 	public CellularGrid(CellularMapFile.Map map, int width, int height, 
 			boolean wrap) {
 		this.width = width;
@@ -119,31 +126,62 @@ public class CellularGrid {
 		this.grid = next;
 	}
 	
-	
+	/**
+	 * Step ahead a specified number of times.
+	 * @param n The number of steps
+	 */
 	public void step(int n) {
 		for(int i = 0; i < n; i++)
 			step();
 	}
 	
+	/**
+	 * Randomize the whole grid.
+	 */
 	public void randomize() {
 		for(int i = 0; i < grid.length; i++) {
 			grid[i] = rand.nextBoolean();
 		}
 	}
 	
+	/**
+	 * Get the status of the specified cell.
+	 * @param x The horizontal position
+	 * @param y The vertical position
+	 * @return The value of the cell
+	 */
 	public boolean get(int x, int y) {
 		return grid[(y * width) + x];
 	}
 	
+	/**
+	 * Determine if a cell changed in the last step.
+	 * @param x The horizontal position
+	 * @param y The vertical position
+	 * @return True if the cell has changed
+	 */
 	public boolean changed(int x, int y) {
 		return changeMap[(y * width) + x];
 	}
 	
+	/**
+	 * Set the cell at the specified coordinate.
+	 * @param x The horizontal postion
+	 * @param y The vertical position
+	 */
 	public void set(int x, int y) {
 		if(x >= 0 && x < width && y >= 0 && y < height)
 			grid[(y * width) + x] = true;
 	}
 	
+	/**
+	 * Randomly set a square section of the grid. This is for implementing a
+	 * touch based interface.
+	 * @param x The horizontal centre position
+	 * @param y The vertical centre position
+	 * @param r The width of the square
+	 * @deprecated Needs to be changed to a more appropriate name.
+	 */
 	public void set(int x, int y, int r) {
 		for(int xp = x - r; xp < x + r; xp++) {
 			for(int yp = y - r; yp < y + r; yp++) {
@@ -155,14 +193,23 @@ public class CellularGrid {
 		set(x, y);
 	}
 	
+	/**
+	 * Get the width of the grid.
+	 * @return The width as an integer
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Get the height of the grid.
+	 * @return The height as an integer
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	//  TODO
 	public void analyze() {
 		//GraphSet<Point,String> gs = new GraphSet<Point,String>(new GridBuild());
 	}
