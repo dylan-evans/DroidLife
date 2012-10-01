@@ -213,46 +213,5 @@ public class CellularGrid {
 	public void analyze() {
 		//GraphSet<Point,String> gs = new GraphSet<Point,String>(new GridBuild());
 	}
-	
-	class GridBuild extends GraphBuilder<Point,String> {
-		private int x = 0, y = 0;
-		private Point node = null;
-		@Override
-		public void build(Vertex<Point, String> v,
-				Iterator<Vertex<Point, String>> set) {
-			while(set.hasNext()) {
-				Vertex<Point, String> vert = set.next();
-				if(true) {
-					v.addEdge(vert, "");
-				}
-			}
-		}
-		
-		public Point next() {
-			node = null;
-			if(hasNext()) {
-				return node;
-			}
-			
-			return null;
-		}
-		
-		public boolean hasNext() {
-			if(node != null) return true;
-			for(; x < width; x++) {
-				for(; y < height; y++) {
-					if(grid[(y * width) + x]) {
-						node = new Point(x, y);
-					}
-				}
-			}
-			return false;
-		}
-		
-	}
-	
 
-
-
-	
 }
